@@ -1,5 +1,6 @@
 import { FastifyPluginCallback } from "fastify";
 import { login } from "../../utils/auth";
+import { refreshAccessToken, validateToken } from "../../utils/jwt";
 import { Cookie } from "../cookie";
 import { Header } from "../header";
 
@@ -37,9 +38,62 @@ export const auth: FastifyPluginCallback = (app, options, next) => {
         reply.send(accessToken);
       } catch (error) {
         app.log.error({ ...error, username });
+        reply.clearCookie(Cookie.RefreshToken);
+        reply.removeHeader(Header.AccessToken);
+        reply.status(401);
+        reply.send(error);
       }
     }
   );
+
+  app.get<{ Headers: { [Header.AccessToken]: string } }>(
+    `${path}/validate`,
+    async (request, reply) => {
+      const accessTokenHeader = request.headers[Header.AccessToken];
+      if (!accessTokenHeader) {
+        reply.status(401);
+        reply.send(
+          new Error(
+            `No access token found, set the header ${Header.AccessToken}`
+          )
+        );
+        return;
+      }
+
+      const [, accessToken] = accessTokenHeader.split(" ");
+      const validated = validateToken(accessToken);
+
+      if (validated) {
+        reply.send("OK");
+      } else {
+        reply.status(401);
+        reply.send(new Error(`Access token expired`));
+      }
+    }
+  );
+
+  app.post(`${path}/refresh`, async (request, reply) => {
+    const { value: refreshToken } = request.unsignCookie(
+      request.cookies[Cookie.RefreshToken]
+    );
+
+    if (!refreshToken) {
+      reply.status(401);
+      reply.send(new Error(`No refresh token found`));
+      return;
+    }
+
+    const newAccessToken = refreshAccessToken(refreshToken);
+
+    if (!newAccessToken) {
+      reply.status(401);
+      reply.send(new Error(`Invalid refresh token`));
+      return;
+    }
+
+    reply.header(Header.AccessToken, `Bearer ${newAccessToken}`);
+    reply.send(newAccessToken);
+  });
 
   next();
 };
