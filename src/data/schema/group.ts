@@ -3,8 +3,6 @@ import { Schema, Document, Model, model } from "mongoose";
 export interface Group {
   /** Name of the group */
   name: string;
-  /** Enable token login support */
-  enableToken: string;
 }
 
 export interface GroupDocument extends Group, Document {}
