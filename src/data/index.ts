@@ -1,36 +1,7 @@
 import mongoose from "mongoose";
 import config from "config";
 import { FastifyPluginCallback } from "fastify";
-import { GroupModel } from "./schema/group";
-import { UserModel } from "./schema/user";
-
-async function createAdminGroup() {
-  const adminGroup = {
-    name: "admin",
-  };
-
-  const exists = await GroupModel.exists({ name: adminGroup.name });
-
-  if (!exists) {
-    GroupModel.create(adminGroup);
-  }
-}
-
-async function createAdminUser() {
-  const adminGroup = await GroupModel.findOne({ name: "admin" });
-
-  const adminUser = {
-    username: config.get("app.admin.user") as string,
-    password: config.get("app.admin.password"),
-    groups: [adminGroup],
-  };
-
-  const exists = await UserModel.exists({ username: adminUser.username });
-
-  if (!exists) {
-    UserModel.create(adminUser);
-  }
-}
+import * as admin from "../utils/admin";
 
 export const connectDatabase: FastifyPluginCallback = async (
   app,
@@ -56,8 +27,8 @@ export const connectDatabase: FastifyPluginCallback = async (
     }
   );
 
-  await createAdminGroup();
-  await createAdminUser();
+  await admin.createGroup();
+  await admin.createUser();
 
   next();
 };
