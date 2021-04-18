@@ -1,8 +1,8 @@
 import { FastifyPluginCallback } from "fastify";
 import { login } from "../../utils/auth";
 import { refreshAccessToken, validateToken } from "../../utils/jwt";
-import { Cookie } from "../cookie";
-import { Header } from "../header";
+import { Cookie } from "../constants/cookie";
+import { Header } from "../constants/header";
 
 const path = "/auth";
 

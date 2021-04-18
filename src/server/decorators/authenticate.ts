@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply, HookHandlerDoneFunction } from "fastify";
 import { validateToken } from "../../utils/jwt";
-import { Header } from "../header";
-import { Status } from "../status";
+import { Header } from "../constants/header";
+import { Status } from "../constants/status";
 
 export function authenticate(
   request: FastifyRequest,
