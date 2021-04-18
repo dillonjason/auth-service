@@ -1,35 +1,26 @@
 import config from "config";
 import jwt from "jsonwebtoken";
-import { Payload } from "./types";
+import { Payload, Tokens } from "./types";
 
-interface Options {
-  /** Did the user login with a token */
-  tokenLogin?: boolean;
-}
-
-interface Tokens {
-  /** Token provided to the client to enable access */
-  accessToken: string;
-  /** Token sent to client in httpOnly to refresh access */
-  refreshToken: string;
-}
-
-export function createTokens(payload: Payload, options: Options = {}): Tokens {
+export function createTokens(payload: Payload): Tokens {
   const secret = config.get("app.auth.secret") as string;
-  const { tokenLogin } = options;
+  const accessExpires = config.get("app.auth.accessExpires") as number;
+  const refreshExpires = config.get("app.auth.refreshExpires") as number;
+
+  const refreshExpireDate = new Date();
+  refreshExpireDate.setSeconds(refreshExpireDate.getSeconds() + refreshExpires);
 
   const accessToken = jwt.sign(payload, secret, {
-    expiresIn: config.get("app.auth.accessExpires"),
+    expiresIn: accessExpires,
   });
 
   const refreshToken = jwt.sign(payload, secret, {
-    expiresIn: tokenLogin
-      ? config.get("app.auth.tokenRefreshExpire")
-      : config.get("app.auth.refreshExpire"),
+    expiresIn: refreshExpires,
   });
 
   return {
     accessToken,
     refreshToken,
+    refreshExpireDate,
   };
 }

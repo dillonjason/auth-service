@@ -6,9 +6,7 @@ export interface User {
   /** User name for login */
   username: string;
   /** User password for login */
-  password?: string;
-  /** User token for login */
-  token?: string;
+  password: string;
   /** Groups the user belongs to */
   groups: string[];
 }
@@ -26,9 +24,9 @@ export const userSchema = new Schema<UserDocument, UserModel>({
   },
   password: {
     type: String,
+    required: true,
     set: encrypt,
   },
-  token: { type: String, set: encrypt },
   groups: {
     type: [Schema.Types.ObjectId],
     required: true,

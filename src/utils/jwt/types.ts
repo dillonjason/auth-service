@@ -7,3 +7,13 @@ export interface Payload {
   /** Available groups for the user */
   groups: string[];
 }
+
+/** Tokens to be generated */
+export interface Tokens {
+  /** Token provided to the client to enable access */
+  accessToken: string;
+  /** Token sent to client in httpOnly to refresh access */
+  refreshToken: string;
+  /** Date the refresh token expires */
+  refreshExpireDate: Date;
+}

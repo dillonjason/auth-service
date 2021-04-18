@@ -7,9 +7,11 @@
     },
     "auth": {
       "secret": "secret",
-      "accessExpire": 120,
-      "refreshExpire": 604800,
-      "tokenRefreshExpire": 2628000
+      "accessExpires": 120,
+      "refreshExpires": 604800
+    },
+    "cookie": {
+      "secret": "secret"
     }
   },
   "database": {
