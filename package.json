@@ -6,7 +6,7 @@
   "author": "Dillon Jason <djasuar@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node-dev src/server/index.ts"
+    "dev": "ts-node-dev src/server/index.ts"
   },
   "devDependencies": {
     "@types/config": "^0.0.38",

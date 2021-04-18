@@ -4,34 +4,33 @@ import { FastifyPluginCallback } from "fastify";
 import { GroupModel } from "./schema/group";
 import { UserModel } from "./schema/user";
 
-const createRequiredData = async () => {
-  const adminGroup = new GroupModel({
+async function createAdminGroup() {
+  const adminGroup = {
     name: "admin",
-  });
+  };
 
-  const adminUser = new UserModel({
-    username: config.get("app.admin.user"),
+  const exists = await GroupModel.exists({ name: adminGroup.name });
+
+  if (!exists) {
+    GroupModel.create(adminGroup);
+  }
+}
+
+async function createAdminUser() {
+  const adminGroup = await GroupModel.findOne({ name: "admin" });
+
+  const adminUser = {
+    username: config.get("app.admin.user") as string,
     password: config.get("app.admin.password"),
     groups: [adminGroup],
-  });
+  };
 
-  await Promise.all([
-    UserModel.findOneAndUpdate(
-      { username: adminUser.username },
-      adminUser.toJSON(),
-      {
-        upsert: true,
-      }
-    ),
-    GroupModel.findOneAndUpdate(
-      { name: adminGroup.name },
-      adminGroup.toJSON(),
-      {
-        upsert: true,
-      }
-    ),
-  ]);
-};
+  const exists = await UserModel.exists({ username: adminUser.username });
+
+  if (!exists) {
+    UserModel.create(adminUser);
+  }
+}
 
 export const connectDatabase: FastifyPluginCallback = async (
   app,
@@ -57,7 +56,8 @@ export const connectDatabase: FastifyPluginCallback = async (
     }
   );
 
-  await createRequiredData();
+  await createAdminGroup();
+  await createAdminUser();
 
   next();
 };
