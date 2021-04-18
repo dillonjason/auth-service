@@ -15,8 +15,8 @@ interface User {
 export interface UserDocument extends User, Document {}
 export type UserModel = Model<UserDocument>;
 
-const UserSchema = new Schema<UserDocument, UserModel>({
-  name: {
+export const userSchema = new Schema<UserDocument, UserModel>({
+  username: {
     type: String,
     required: true,
     unique: true,
@@ -25,7 +25,11 @@ const UserSchema = new Schema<UserDocument, UserModel>({
   },
   password: { type: String },
   token: { type: String },
-  groups: { type: [GroupModel], required: true },
+  groups: {
+    type: [Schema.Types.ObjectId],
+    required: true,
+    ref: GroupModel.name,
+  },
 });
 
-export const UserModel = model<UserDocument, UserModel>("User", UserSchema);
+export const UserModel = model<UserDocument, UserModel>("User", userSchema);

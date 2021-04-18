@@ -1,9 +1,13 @@
 {
   "app": {
-    "port": 80
+    "port": 80,
+    "admin": {
+      "user": "admin",
+      "password": "password"
+    }
   },
   "database": {
-    "url": "mongodb://db:27017",
+    "url": "mongodb://auth-db:27017",
     "name": "auth",
     "user": "root",
     "password": "password"

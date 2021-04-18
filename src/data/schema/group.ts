@@ -10,7 +10,7 @@ interface Group {
 export interface GroupDocument extends Group, Document {}
 export type GroupModel = Model<GroupDocument>;
 
-const GroupSchema = new Schema<GroupDocument, GroupModel>({
+export const groupSchema = new Schema<GroupDocument, GroupModel>({
   name: {
     type: String,
     required: true,
@@ -23,5 +23,5 @@ const GroupSchema = new Schema<GroupDocument, GroupModel>({
 
 export const GroupModel = model<GroupDocument, GroupModel>(
   "Group",
-  GroupSchema
+  groupSchema
 );

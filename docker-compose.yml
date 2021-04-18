@@ -3,38 +3,38 @@ services:
   service:
     build: .
     ports:
-      - "5001:80"
+      - "5002:80"
     networks:
-      - db-network
-  db:
+      - auth-db-network
+  auth-db:
     image: mongo
-    container_name: db
+    container_name: auth-db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=password
     volumes:
-      - db-data:/data/db
+      - auth-db-data:/data/db
     ports:
       - "27017:27017"
     networks:
-      - db-network
-  mongo-express:
+      - auth-db-network
+  auth-mongo-express:
     image: mongo-express
-    container_name: mongo-express
+    container_name: auth-mongo-express
     environment:
-      - ME_CONFIG_MONGODB_SERVER=db
+      - ME_CONFIG_MONGODB_SERVER=auth-db
       - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
       - ME_CONFIG_MONGODB_ADMINUSERNAME=root
       - ME_CONFIG_MONGODB_ADMINPASSWORD=password
     networks:
-      - db-network
+      - auth-db-network
     depends_on:
-      - db
+      - auth-db
     ports:
       - "8081:8081"
 volumes:
-  db-data:
-    name: db-data
+  auth-db-data:
+    name: auth-db-data
 networks:
-  db-network:
-    name: db-network
+  auth-db-network:
+    name: auth-db-network
