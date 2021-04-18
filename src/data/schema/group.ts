@@ -1,6 +1,6 @@
 import { Schema, Document, Model, model } from "mongoose";
 
-interface Group {
+export interface Group {
   /** Name of the group */
   name: string;
   /** Enable token login support */

@@ -1,7 +1,8 @@
 import { Schema, Document, Model, model } from "mongoose";
-import { GroupDocument, GroupModel } from "./group";
+import { encrypt } from "../../utils/password";
+import { GroupModel } from "./group";
 
-interface User {
+export interface User {
   /** User name for login */
   username: string;
   /** User password for login */
@@ -9,7 +10,7 @@ interface User {
   /** User token for login */
   token?: string;
   /** Groups the user belongs to */
-  groups: GroupDocument[];
+  groups: string[];
 }
 
 export interface UserDocument extends User, Document {}
@@ -23,8 +24,11 @@ export const userSchema = new Schema<UserDocument, UserModel>({
     lowercase: true,
     trim: true,
   },
-  password: { type: String },
-  token: { type: String },
+  password: {
+    type: String,
+    set: encrypt,
+  },
+  token: { type: String, set: encrypt },
   groups: {
     type: [Schema.Types.ObjectId],
     required: true,
