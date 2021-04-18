@@ -4,6 +4,12 @@
     "admin": {
       "user": "admin",
       "password": "password"
+    },
+    "auth": {
+      "secret": "secret",
+      "accessExpire": 120,
+      "refreshExpire": 604800,
+      "tokenRefreshExpire": 2628000
     }
   },
   "database": {
