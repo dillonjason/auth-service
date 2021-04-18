@@ -34,27 +34,27 @@ export const auth: FastifyPluginCallback = (app, options, next) => {
           signed: true,
           expires: refreshExpireDate,
         });
-        reply.header(Header.AccessToken, `Bearer ${accessToken}`);
+        reply.header(Header.Authorization, `Bearer ${accessToken}`);
         reply.send(accessToken);
       } catch (error) {
         app.log.error({ ...error, username });
         reply.clearCookie(Cookie.RefreshToken);
-        reply.removeHeader(Header.AccessToken);
+        reply.removeHeader(Header.Authorization);
         reply.status(401);
         reply.send(error);
       }
     }
   );
 
-  app.get<{ Headers: { [Header.AccessToken]: string } }>(
+  app.get<{ Headers: { [Header.Authorization]: string } }>(
     `${path}/validate`,
     async (request, reply) => {
-      const accessTokenHeader = request.headers[Header.AccessToken];
+      const accessTokenHeader = request.headers[Header.Authorization];
       if (!accessTokenHeader) {
         reply.status(401);
         reply.send(
           new Error(
-            `No access token found, set the header ${Header.AccessToken}`
+            `No access token found, set the header ${Header.Authorization}`
           )
         );
         return;
@@ -91,7 +91,7 @@ export const auth: FastifyPluginCallback = (app, options, next) => {
       return;
     }
 
-    reply.header(Header.AccessToken, `Bearer ${newAccessToken}`);
+    reply.header(Header.Authorization, `Bearer ${newAccessToken}`);
     reply.send(newAccessToken);
   });
 
