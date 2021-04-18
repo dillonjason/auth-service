@@ -18,7 +18,6 @@ export const groupSchema = new Schema<GroupDocument, GroupModel>({
     lowercase: true,
     trim: true,
   },
-  enableToken: { type: Boolean, default: false },
 });
 
 export const GroupModel = model<GroupDocument, GroupModel>(
