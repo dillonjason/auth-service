@@ -7,7 +7,7 @@ export async function login(
   username: string,
   password: string
 ): Promise<Tokens> {
-  const user = await UserModel.findOne({ username }).exec();
+  const user = await UserModel.findOne({ username }).populate("groups").exec();
   if (!user) {
     throw new Error("Unable to find user");
   }
@@ -26,6 +26,6 @@ export async function login(
   return createTokens({
     id: user.id,
     username,
-    groups: user.groups,
+    groups: user.groups.map((group) => group.name),
   });
 }

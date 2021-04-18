@@ -4,6 +4,8 @@ import { GroupModel, Group } from "../../data/schema/group";
 const path = "/group";
 
 export const group: FastifyPluginCallback = (app, options, next) => {
+  app.addHook("onRequest", app.authenticate);
+
   app.post<{ Body: Group }>(path, async (request, reply) => {
     const newGroup = await GroupModel.create(request.body);
     reply.send(newGroup);

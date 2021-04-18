@@ -4,6 +4,8 @@ import { UserModel, User } from "../../data/schema/user";
 const path = "/user";
 
 export const user: FastifyPluginCallback = (app, options, next) => {
+  app.addHook("onRequest", app.authenticate);
+
   app.post<{ Body: User }>(path, async (request, reply) => {
     const newUser = await UserModel.create(request.body);
     reply.send(newUser);

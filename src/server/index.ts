@@ -6,6 +6,7 @@ import { connectDatabase } from "../data";
 import { user } from "./routes/user";
 import { group } from "./routes/group";
 import { auth } from "./routes/auth";
+import { authenticate } from "./decorators/authenticate";
 
 const app = fastify({ logger: true });
 
@@ -13,6 +14,9 @@ const app = fastify({ logger: true });
 app.register(fastifyCookie, {
   secret: config.get("app.cookie.secret"),
 });
+
+// Decorators
+app.decorate("authenticate", authenticate);
 
 // Connect to database
 app.register(connectDatabase);
