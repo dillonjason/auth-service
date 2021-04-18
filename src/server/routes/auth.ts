@@ -35,7 +35,7 @@ export const auth: FastifyPluginCallback = (app, options, next) => {
           expires: refreshExpireDate,
         });
         reply.header(Header.Authorization, `Bearer ${accessToken}`);
-        reply.send(accessToken);
+        reply.send({ token: accessToken });
       } catch (error) {
         app.log.error({ ...error, username });
         reply.clearCookie(Cookie.RefreshToken);
@@ -92,7 +92,7 @@ export const auth: FastifyPluginCallback = (app, options, next) => {
     }
 
     reply.header(Header.Authorization, `Bearer ${newAccessToken}`);
-    reply.send(newAccessToken);
+    reply.send({ token: newAccessToken });
   });
 
   next();

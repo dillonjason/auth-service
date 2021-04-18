@@ -1,3 +1,3 @@
 export enum Header {
-  Authorization = "Authorization",
+  Authorization = "authorization",
 }
