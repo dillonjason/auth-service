@@ -1,0 +1,11 @@
+{
+  "app": {
+    "port": 80
+  },
+  "database": {
+    "url": "mongodb://db:27017",
+    "name": "auth",
+    "user": "root",
+    "password": "password"
+  }
+}
