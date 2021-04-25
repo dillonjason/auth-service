@@ -8,6 +8,14 @@ export const connectDatabase: FastifyPluginCallback = async (
   options,
   next
 ) => {
+  app.log.info(
+    {
+      url: config.get("database.url"),
+      dbName: config.get("database.name"),
+    },
+    "Connecting to database"
+  );
+
   await mongoose.connect(
     config.get("database.url"),
     {
