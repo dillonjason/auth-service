@@ -1,0 +1,23 @@
+{
+  "app": {
+    "port": "APP_PORT",
+    "admin": {
+      "user": "APP_ADMIN_USER",
+      "password": "APP_ADMIN_PASSWORD"
+    },
+    "auth": {
+      "secret": "APP_AUTH_SECRET",
+      "accessExpires": "APP_AUTH_ACCESS_EXPIRES",
+      "refreshExpires": "APP_AUTH_REFRESH_EXPIRES"
+    },
+    "cookie": {
+      "secret": "APP_COOKIE_SECRET"
+    }
+  },
+  "database": {
+    "url": "DATABASE_URL",
+    "name": "DATABASE_NAME",
+    "user": "DATABASE_USER",
+    "password": "DATABASE_PASSWORD"
+  }
+}
