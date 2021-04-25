@@ -6,6 +6,8 @@
   "author": "Dillon Jason <djasuar@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build": "tsc",
+    "start": "node build/server/index.js",
     "dev": "ts-node-dev src/server/index.ts"
   },
   "devDependencies": {
